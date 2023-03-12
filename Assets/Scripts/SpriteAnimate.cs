@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class SpriteAnimate : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public Sprite[] sprites;
+
+    private SpriteRenderer spriteRenderer;
+    private int frame;
+
+    private void Awake() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnEnable() {
+        Invoke(nameof(Animate), 0f);
+    }
+
+    private void OnDisable() {
+        CancelInvoke();    
+    }
+
+    private void Animate() {
+        frame++;
+
+        if(frame >= sprites.Length) {
+            frame = 0;
+        }
+
+        if(frame >= 0 && frame < sprites.Length) {
+            spriteRenderer.sprite = sprites[frame];
+        }
+
+        Invoke(nameof(Animate), 1f/GameManager.Instance.GetScrollSpeed());
     }
 }

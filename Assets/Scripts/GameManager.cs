@@ -8,13 +8,18 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text hiscoreText;
     [SerializeField] private float initialScrollSpeed; // Velocidad inicial seteable
 
-    private float score;
+    private float score; // Puntaje
     private float timer;
     private float scrollSpeed;
 
     public static GameManager Instance {get; private set;}
+
+    //public TextMeshProGUI scoreText;
+    //public TextMeshProGUI hiscore; //Hiscore
+
 
     private void Awake() {
         if(Instance != null && Instance != this){
@@ -41,12 +46,15 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1f;
     }
+    
+    // Actualizamos muestro Score
     private void UpdateScore(){
         int scorePerSeconds = 10;
 
         timer += Time.deltaTime;
         score=(float)(timer * scorePerSeconds);
-        scoreText.text=string.Format("{0:000000}", score);
+        //scoreText.text=string.Format("{0:000000}", score);
+        scoreText.text = Mathf.FloorToInt(score).ToString("D4");
     }
 
     public float GetScrollSpeed(){
@@ -65,6 +73,6 @@ public class GameManager : MonoBehaviour
             hiscore = score;
             PlayerPrefs.SetFloat("hiscore", hiscore);
         }
-        //hiscoreText.text = Mathf.FloorToInt(hiscore).ToString("D5");
+        hiscoreText.text = Mathf.FloorToInt(hiscore).ToString("D4");
     }
 }

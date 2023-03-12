@@ -4,11 +4,28 @@ using UnityEngine;
 
 public class ObstacleSpawner : MonoBehaviour
 {
+    // Array de Obstacles para los prefabs
     [SerializeField] private GameObject[] obstacles;
-    // Start is called before the first frame update
+
+    public GameObject birdPrefab;
+    public float spawnInterval = 1f;
+    public float spawnHeightMin = -2f;
+    public float spawnHeightMax = 2f;
+    
     void Start()
     {
         StartCoroutine(SpawnObstacle());
+        StartCoroutine(SpawnBirds());
+    }
+
+    private IEnumerator SpawnBirds()
+    {
+        while (true)
+        {
+            Vector3 spawnPos = new Vector3(transform.position.x, Random.Range(spawnHeightMin, spawnHeightMax), 0f);
+            Instantiate(birdPrefab, spawnPos, Quaternion.identity);
+            yield return new WaitForSeconds(spawnInterval);
+        }
     }
 
     private IEnumerator SpawnObstacle() {
